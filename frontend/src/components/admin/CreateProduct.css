@@ -1,0 +1,26 @@
+.productPhotos {
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+}
+
+input[name="productPhotos"]::file-selector-button {
+  cursor: pointer;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  height: 100%;
+  position: absolute;
+  border: none;
+  z-index: 2;
+
+  /* background: white; */
+  transition: all 0.3s ease-in-out;
+  /* box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.75); */
+}
+
+.textareawidth {
+  width: 100%;
+}

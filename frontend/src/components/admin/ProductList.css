@@ -1,0 +1,12 @@
+.MuiDataGrid-columnHeader {
+  background-color: #1976d2;
+  color: white;
+  font-size: 1rem;
+  font-weight: bolder;
+}
+
+.MuiDataGrid-columnHeader:last-child .MuiDataGrid-columnHeaderTitleContainer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}

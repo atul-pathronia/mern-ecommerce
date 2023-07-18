@@ -1,0 +1,6 @@
+.userProfile {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px 2px #1976d2;
+}
