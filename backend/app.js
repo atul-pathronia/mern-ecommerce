@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/v1/products", productRouter);
-app.use("/api/v1", userRouter);
+app.use("/api/v1/users", userRouter);
 app.use("/api/v1/review", reviewRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/payment", paymentRouter);

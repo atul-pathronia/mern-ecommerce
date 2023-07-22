@@ -9,8 +9,10 @@ import OrderList from "./OrderList";
 import UpdateOrder from "./UpdateOrder";
 import AllUsersList from "./AllUsersList";
 import UpdateUser from "./UpdateUser";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { clearErrors } from "../../actions/productActions";
 
 const AdminControl = () => {
   const navigate = useNavigate();
@@ -23,13 +25,19 @@ const AdminControl = () => {
   const [showUsers, setShowUsers] = useState(false);
   const [showUpdateUser, setShowUpdateUser] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { enqueueSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
+  const { error, user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (error || user.role !== "admin") {
       navigate("/");
+      enqueueSnackbar("Unauthorized access. ", {
+        variant: "error",
+      });
+      dispatch(clearErrors());
     }
-  }, [isAuthenticated, navigate]);
+  }, [error, navigate]);
 
   const toggleTabs = (e) => {
     e.preventDefault();

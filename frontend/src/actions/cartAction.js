@@ -5,12 +5,11 @@ import {
   ORDERED_PLACED_CART_NIL,
 } from "../constants/cartConstant";
 import axios from "axios";
+import { api } from "../config";
 
 // ADD ITEM TO CART
 export const addItemsToCart = (id, quantity) => async (dispatch, getState) => {
-  const { data } = await axios.get(
-    `http://localhost:8000/api/v1/products/${id}`
-  );
+  const { data } = await axios.get(`${api.endpoint}/products/${id}`);
   dispatch({
     type: ADD_TO_CART,
     payload: {

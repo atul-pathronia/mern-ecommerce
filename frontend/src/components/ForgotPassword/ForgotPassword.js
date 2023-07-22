@@ -7,6 +7,7 @@ import {
   Paper,
   TextField,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { useSelector, useDispatch } from "react-redux";
@@ -14,6 +15,7 @@ import { clearErrors, forgotPassword } from "../../actions/userAction";
 import Loader from "../Loader/Loader";
 import { useSnackbar } from "notistack";
 import MetaData from "../MetaData";
+import { FORGOT_PASSWORD_RESET } from "../../constants/userConstant";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -36,70 +38,67 @@ const ForgotPassword = () => {
     }
     if (message) {
       enqueueSnackbar(message, { variant: "success" });
+      dispatch({ type: FORGOT_PASSWORD_RESET });
     }
-  }, [error, message]);
+  }, [dispatch, error, message]);
 
   return (
     <>
       <MetaData title={`Urbane Man | Forgot Password`}></MetaData>
-      {loading ? (
-        <Loader></Loader>
-      ) : (
-        <Box
+      <Box
+        sx={{
+          backgroundColor: "#eee",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 0",
+          flexDirection: "column",
+          gap: "2rem",
+        }}
+      >
+        <Typography
           sx={{
-            backgroundColor: "#eee",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem 0",
-            flexDirection: "column",
-            gap: "2rem",
+            color: "primary.main",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            borderBottom: "5px solid #1976d2",
+            //   textDecoration: "underline",
           }}
         >
-          <Typography
-            sx={{
-              color: "primary.main",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              borderBottom: "5px solid #1976d2",
-              //   textDecoration: "underline",
-            }}
-          >
-            Forgot Password
-          </Typography>
-          <Box component="form">
-            <Paper sx={{ padding: "1rem" }}>
-              <Stack gap="1rem">
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  label="Email"
-                  type="text"
-                  placeholder="Enter your registered email"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MailOutlineIcon></MailOutlineIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  onClick={handleForgotPassword}
-                  disabled={loading ? true : false}
-                >
-                  Submit
-                </Button>
-              </Stack>
-            </Paper>
-          </Box>
+          Forgot Password
+        </Typography>
+        <Box component="form">
+          <Paper sx={{ padding: "1rem" }}>
+            <Stack gap="1rem">
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                label="Email"
+                type="text"
+                placeholder="Enter your registered email"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineIcon></MailOutlineIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <Button
+                variant="contained"
+                type="submit"
+                onClick={handleForgotPassword}
+                disabled={loading ? true : false}
+              >
+                {loading ? <CircularProgress></CircularProgress> : "Submit"}
+              </Button>
+            </Stack>
+          </Paper>
         </Box>
-      )}
+      </Box>
     </>
   );
 };

@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
-import { adminUpdateOrder, myOrderDetails } from "../../actions/orderAction";
+import {
+  adminUpdateOrder,
+  myOrderDetails,
+  adminGetAllOrders,
+} from "../../actions/orderAction";
 import { Link } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
@@ -38,7 +42,7 @@ const UpdateOrder = ({ setshowOrders, setShowUpdateOrder }) => {
       dispatch(myOrderDetails(order._id));
       dispatch({ type: ADMIN_UPDATE_ORDER_RESET });
     }
-  }, [dispatch, order._id, enqueueSnackbar, isUpdated]);
+  }, [dispatch, enqueueSnackbar, isUpdated]);
 
   return (
     <>

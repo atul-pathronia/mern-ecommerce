@@ -1,12 +1,11 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { myOrders, clearErrors } from "../../actions/orderAction";
 import Loader from "../Loader/Loader";
 import { Link, useNavigate } from "react-router-dom";
-import { Box, Stack, Typography, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import MetaData from "../MetaData";
-import LaunchIcon from "@mui/icons-material/Launch";
 import { useSnackbar } from "notistack";
 import "./MyOrders.css";
 
@@ -14,7 +13,7 @@ const MyOrders = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { error: userError, user } = useSelector((state) => state.user);
   const { loading, orders, error } = useSelector((state) => state.myOrders);
 
   const columns = [
@@ -75,15 +74,15 @@ const MyOrders = () => {
     });
 
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
+    if (userError) {
+      navigate("/");
+      enqueueSnackbar("Unauthorized access ", {
+        variant: "error",
+      });
       dispatch(clearErrors());
     }
-    if (!isAuthenticated) {
-      navigate("/");
-    }
     dispatch(myOrders());
-  }, [error]);
+  }, [error, userError]);
 
   return (
     <Box sx={{ overflowX: "auto", width: "100%" }}>

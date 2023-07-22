@@ -13,7 +13,6 @@ import {
   Box,
   Stack,
   Button,
-  Typography,
   TextField,
   Paper,
   InputAdornment,
@@ -21,6 +20,7 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  CircularProgress,
 } from "@mui/material";
 import CheckoutSteps from "../CheckoutSteps/CheckoutSteps";
 import { useSnackbar } from "notistack";
@@ -37,7 +37,6 @@ const ShippingInfo = () => {
   const [phoneNo, setPhoneNo] = useState(shippingInfo.phoneNo);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.user);
 
   const handleShipping = (e) => {
     e.preventDefault();
@@ -217,7 +216,7 @@ const ShippingInfo = () => {
               disabled={state ? false : true}
               onClick={handleShipping}
             >
-              Submit
+              Proceed
             </Button>
           </Stack>
         </Paper>

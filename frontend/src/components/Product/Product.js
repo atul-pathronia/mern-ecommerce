@@ -31,6 +31,7 @@ const Product = ({ product }) => {
           sx={{
             gap: { md: "0.5rem", sm: 0 },
             display: "flex",
+            flexWrap: "wrap",
             flexDirection: { md: "row", sm: "column" },
             alignItems: { md: "flex-end", sm: "flex-start" },
           }}

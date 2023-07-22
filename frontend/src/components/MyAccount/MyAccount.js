@@ -6,12 +6,13 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useState } from "react";
 import Profile from "../Profile/Profile";
 import MyOrders from "../MyOrders/MyOrders";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import AllReviewsList from "../MyReviews/AllReviewsList";
 import Loader from "../Loader/Loader";
 import { useSnackbar } from "notistack";
 import MetaData from "../MetaData";
+import { clearErrors } from "../../actions/userAction";
 
 const MyAccount = () => {
   const [showProfile, setShowProfile] = useState(true);
@@ -19,17 +20,19 @@ const MyAccount = () => {
   const [showdashboard, setShowDashboard] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { error, user, loading, isAuthenticated } = useSelector(
     (state) => state.user
   );
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    }
     if (error) {
-      enqueueSnackbar(error, { variant: "error" });
+      enqueueSnackbar("You cannot access this page without login. ", {
+        variant: "error",
+      });
+      dispatch(clearErrors());
+      navigate("/");
     }
   }, [error]);
 
@@ -111,7 +114,7 @@ const MyAccount = () => {
               >
                 My Reviews
               </Button>
-              {user.role === "admin" && (
+              {user?.role === "admin" && (
                 <Button
                   size="small"
                   variant={showdashboard ? "contained" : null}

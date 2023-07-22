@@ -45,7 +45,7 @@ const Header = () => {
       enqueueSnackbar("Logout Successfully", { variant: "success" });
       navigate("/");
     } else {
-      navigate("/signup");
+      navigate("/register");
     }
   };
 
@@ -116,7 +116,7 @@ const Header = () => {
                   {isAuthenticated ? "Logout" : "Signup"}
                 </Button>
               </>
-            ) : window.location.pathname === "/signup" ? (
+            ) : window.location.pathname === "/register" ? (
               <>
                 <Button
                   size="small"

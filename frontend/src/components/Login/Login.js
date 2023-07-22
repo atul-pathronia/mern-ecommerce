@@ -6,6 +6,7 @@ import {
   Button,
   Stack,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -17,13 +18,12 @@ import { useSnackbar } from "notistack";
 import Loader from "../Loader/Loader";
 import MetaData from "../MetaData";
 
-const Login = () => {
+const Login = ({ getStripeApiKey }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error, loading, isAuthenticated } = useSelector((state) => {
-    // console.log(state.user);
     return state.user;
   });
   const { enqueueSnackbar } = useSnackbar();
@@ -47,24 +47,13 @@ const Login = () => {
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
+      enqueueSnackbar("Log in Successful", { variant: "success" });
       navigate(redirect);
+      getStripeApiKey();
     }
   }, [error, isAuthenticated]);
 
-  if (loading) {
-    return <Loader></Loader>;
-  }
-
-  // if (isAuthenticated) {
-  //   navigate("/myaccount");
-  //   return enqueueSnackbar("Logged In Successfully", { variant: "success" });
-  // }
-
   return (
-    // <>
-    //   {loading ? (
-    //     <Loader></Loader>
-    //   ) : (
     <Box
       sx={{
         backgroundColor: "#eee",
@@ -144,14 +133,12 @@ const Login = () => {
               onClick={handleLogin}
               disabled={loading ? true : false}
             >
-              Submit
+              {loading ? <CircularProgress /> : "Submit"}
             </Button>
           </Stack>
         </Paper>
       </Box>
     </Box>
-    //   )}
-    // </>
   );
 };
 

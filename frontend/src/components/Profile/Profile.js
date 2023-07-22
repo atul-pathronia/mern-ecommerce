@@ -33,8 +33,8 @@ const Profile = () => {
             </Typography>
             <img
               className="userProfile"
-              src={user.avatar && user.avatar.url && user.avatar.url}
-              alt={user.name}
+              src={user?.avatar && user?.avatar?.url && user?.avatar?.url}
+              alt={user?.name}
             />
             <Button
               variant="contained"
@@ -55,20 +55,20 @@ const Profile = () => {
               <Typography component="span" sx={{ fontWeight: "bold" }}>
                 Full Name:{" "}
               </Typography>
-              <Typography component="span">{user.name}</Typography>
+              <Typography component="span">{user?.name}</Typography>
             </Box>
             <Box>
               <Typography component="span" sx={{ fontWeight: "bold" }}>
                 Email:{" "}
               </Typography>
-              <Typography component="span">{user.email}</Typography>
+              <Typography component="span">{user?.email}</Typography>
             </Box>
             <Box>
               <Typography component="span" sx={{ fontWeight: "bold" }}>
                 Joined on:{" "}
               </Typography>
               <Typography component="span">
-                {user.createdAt
+                {user?.createdAt
                   ? String(user.createdAt).substring(0, 10)
                   : "25-04-1990"}
               </Typography>
@@ -76,6 +76,7 @@ const Profile = () => {
             <Box>
               <Button
                 variant="contained"
+                // disabled={loading ? true : false}
                 sx={{
                   marginRight: ".5rem",
                   marginLeft: "auto",

@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import {
@@ -10,6 +10,7 @@ import {
 import Loader from "../Loader/Loader";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
 import {
   TextField,
   Dialog,
@@ -84,14 +85,27 @@ const AllReviewsList = () => {
     {
       field: "rating",
       headerName: "Rating",
-      minWidth: 150,
+      minWidth: 50,
       flex: 1,
     },
     {
       field: "product",
       headerName: "Product Id",
-      minWidth: 150,
+      minWidth: 250,
       flex: 1,
+      renderCell: (params) => {
+        console.log(params.id);
+        console.log(params);
+        return (
+          <Fragment>
+            <Link to={`/product/${params.row.product}`}>
+              <Typography sx={{ color: "black" }}>
+                {params.row.product}
+              </Typography>
+            </Link>
+          </Fragment>
+        );
+      },
     },
     {
       field: "actions",
@@ -119,7 +133,7 @@ const AllReviewsList = () => {
   const rows = [];
 
   allReviews &&
-    allReviews.map((review) => {
+    allReviews?.map((review) => {
       return rows.push({
         id: review?._id,
         review: review?.review,

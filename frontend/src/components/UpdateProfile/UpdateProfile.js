@@ -8,6 +8,7 @@ import {
   Button,
   Stack,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -76,9 +77,6 @@ const UpdateProfile = () => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    }
     if (user) {
       setName(user.name);
       setEmail(user.email);
@@ -86,8 +84,13 @@ const UpdateProfile = () => {
       setAvatarPreview(user.avatar && user.avatar.url && user.avatar.url);
     }
     if (userError) {
-      enqueueSnackbar(userError, { variant: "error" });
+      enqueueSnackbar("You cannot access this page without login. ", {
+        variant: "error",
+      });
       dispatch(clearErrors());
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     }
     if (userProfileUpdateError) {
       enqueueSnackbar(userProfileUpdateError, { variant: "error" });
@@ -111,104 +114,108 @@ const UpdateProfile = () => {
   return (
     <>
       <MetaData title={`Urbane Man | Update Profile`}></MetaData>
-      {loading ? (
+      {/* {loading ? (
         <Loader></Loader>
-      ) : (
-        <Box
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#eee",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 0",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <Typography
           sx={{
-            backgroundColor: "#eee",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem 0",
-            flexDirection: "column",
-            gap: "1rem",
+            color: "primary.main",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            borderBottom: "5px solid #1976d2",
+            //   textDecoration: "underline",
           }}
         >
-          <Typography
-            sx={{
-              color: "primary.main",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              borderBottom: "5px solid #1976d2",
-              //   textDecoration: "underline",
-            }}
-          >
-            Update Profile
-          </Typography>
-          <Box component="form" encType="multipart/form-data">
-            <Paper sx={{ padding: "1rem" }}>
-              <Stack gap="1rem">
+          Update Profile
+        </Typography>
+        <Box component="form" encType="multipart/form-data">
+          <Paper sx={{ padding: "1rem" }}>
+            <Stack gap="1rem">
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Face5OutlinedIcon></Face5OutlinedIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Email"
+                type="text"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MailOutlineIcon></MailOutlineIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <Stack
+                sx={{
+                  position: "relative",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "0.5rem",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={!avatarPreview ? UserImage : avatarPreview}
+                  alt="Avatar Preview"
+                  className="userAvatar"
+                />
                 <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
                   variant="outlined"
-                  label="Name"
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Face5OutlinedIcon></Face5OutlinedIcon>
-                      </InputAdornment>
-                    ),
-                  }}
+                  // label="avatar"
+                  name="avatar"
+                  type="file"
+                  accept="image/"
+                  onChange={handleOnChange}
                 ></TextField>
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="Email"
-                  type="text"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MailOutlineIcon></MailOutlineIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <Stack
-                  sx={{
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "0.5rem",
-                    alignItems: "center",
-                  }}
-                >
-                  <img
-                    src={!avatarPreview ? UserImage : avatarPreview}
-                    alt="Avatar Preview"
-                    className="userAvatar"
-                  />
-                  <TextField
-                    variant="outlined"
-                    // label="avatar"
-                    name="avatar"
-                    type="file"
-                    accept="image/"
-                    onChange={handleOnChange}
-                  ></TextField>
-                </Stack>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  //   disabled={loading ? true : false}
-                  onClick={handleUpdateProfile}
-                >
-                  Update Profile
-                </Button>
               </Stack>
-            </Paper>
-          </Box>
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={loading ? true : false}
+                onClick={handleUpdateProfile}
+              >
+                {loading ? (
+                  <CircularProgress></CircularProgress>
+                ) : (
+                  "Update Profile"
+                )}
+              </Button>
+            </Stack>
+          </Paper>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

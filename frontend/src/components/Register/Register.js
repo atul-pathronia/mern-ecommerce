@@ -7,6 +7,7 @@ import {
   Button,
   Stack,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import MetaData from "../MetaData";
 import { Link, useNavigate } from "react-router-dom";
@@ -54,18 +55,14 @@ const Register = () => {
 
   useEffect(() => {
     if (error) {
-      enqueueSnackbar(error);
+      enqueueSnackbar(error, { variant: "error" });
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
       enqueueSnackbar("Log in Successful", { variant: "success" });
-      navigate("/");
+      navigate("/myaccount");
     }
   }, [error, dispatch, isAuthenticated]);
-
-  // if (loading) {
-  //   return <Loader></Loader>;
-  // }
 
   const handleOnChange = (e) => {
     if (e.target.name === "avatar") {
@@ -204,7 +201,7 @@ const Register = () => {
               disabled={loading ? true : false}
               onClick={handleSignup}
             >
-              Submit
+              {loading ? <CircularProgress></CircularProgress> : "Submit"}
             </Button>
           </Stack>
         </Paper>

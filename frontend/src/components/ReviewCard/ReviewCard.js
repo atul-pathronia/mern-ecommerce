@@ -23,11 +23,6 @@ const ReviewCard = ({ review }) => {
           gap: "0.5rem",
         }}
       >
-        <img
-          className="userImg"
-          // src={user}
-          alt="user"
-        />
         <Typography
           sx={{
             textAlign: "center",

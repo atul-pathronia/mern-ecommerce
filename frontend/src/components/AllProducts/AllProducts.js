@@ -42,6 +42,7 @@ const AllProducts = () => {
 
   useEffect(() => {
     if (error) {
+      console.log(error);
       enqueueSnackbar(error, {
         variant: "error",
       });
@@ -106,14 +107,15 @@ const AllProducts = () => {
         </Typography>
         <Box
           sx={{
-            flexDirection: { xs: "row", md: "column" },
             display: "flex",
+            flexDirection: { xs: "row", md: "column" },
+            flexWrap: { xs: "wrap", md: "nowrap" },
             alignItems: "center",
             justifyContent: { xs: "space-between", md: "flex-start" },
             gap: "1rem",
           }}
         >
-          <Stack sx={{ width: { md: "100%", xs: "50%" } }}>
+          <Stack sx={{ width: { md: "100%", xs: "40%" } }}>
             <Typography sx={{ fontWeight: "Bold" }}>Price</Typography>
             <Slider
               // size="small"
@@ -127,7 +129,7 @@ const AllProducts = () => {
               max={25000}
             />
           </Stack>
-          <Stack sx={{ width: { md: "100%", xs: "50%" } }}>
+          <Stack sx={{ width: { md: "100%", xs: "40%" } }}>
             <Typography sx={{ fontWeight: "Bold" }}>Categories</Typography>
             <Select
               value={category}
@@ -146,7 +148,7 @@ const AllProducts = () => {
             </Select>
           </Stack>
 
-          <Stack sx={{ width: { md: "100%", xs: "50%" } }}>
+          <Stack sx={{ width: { md: "100%", xs: "40%" } }}>
             {/* <fieldset> */}
             <Typography sx={{ fontWeight: "Bold" }}>Ratings Above</Typography>
             <Slider
@@ -163,7 +165,7 @@ const AllProducts = () => {
             {/* </fieldset> */}
           </Stack>
 
-          <Stack sx={{ width: { md: "100%", xs: "50%" } }}>
+          <Stack sx={{ width: { md: "100%", xs: "40%" } }}>
             <Button
               onClick={resetFilters}
               // sx={{ size: "small", variant: "contained" }}

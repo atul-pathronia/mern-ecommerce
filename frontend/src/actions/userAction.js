@@ -34,8 +34,10 @@ import {
   ADMIN_USER_DELETE_REQUEST,
   ADMIN_USER_DELETE_SUCCESS,
   ADMIN_USER_DELETE_FAIL,
+  FORGOT_PASSWORD_FAIL,
 } from "../constants/userConstant";
 import axios from "axios";
+import { api } from "../config";
 
 // LOGIN USER
 export const login = (email, password) => async (dispatch) => {
@@ -43,14 +45,14 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    const { data } = await axios.post("http://localhost:8000/api/v1/login", {
+    const { data } = await axios.post(`${api.endpoint}/users/login`, {
       email,
       password,
     });
 
-    dispatch({ type: LOGIN_SUCCESS, payload: data.user });
+    dispatch({ type: LOGIN_SUCCESS, payload: data?.user });
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
+    dispatch({ type: LOGIN_FAIL, payload: error?.response?.data?.message });
   }
 };
 
@@ -61,13 +63,13 @@ export const register = (formdata) => async (dispatch) => {
     const config = { headers: { "Content-type": "multipart/form-data" } };
 
     const { data } = await axios.post(
-      "http://localhost:8000/api/v1/register",
+      `${api.endpoint}/users/register`,
       formdata,
       config
     );
-    dispatch({ type: REGISTER_SUCCESS, payload: data.user });
+    dispatch({ type: REGISTER_SUCCESS, payload: data?.user });
   } catch (error) {
-    dispatch({ type: REGISTER_FAIL, payload: error.response.data.message });
+    dispatch({ type: REGISTER_FAIL, payload: error?.response?.data?.message });
   }
 };
 
@@ -77,7 +79,7 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: LOAD_USER_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    const { data } = await axios.get("http://localhost:8000/api/v1/me");
+    const { data } = await axios.get(`${api.endpoint}/users/me`);
 
     dispatch({ type: LOAD_USER_SUCCESS, payload: data?.user });
   } catch (error) {
@@ -91,11 +93,11 @@ export const logoutUser = () => async (dispatch) => {
     // dispatch({ type: LOAD_USER_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    await axios.get("http://localhost:8000/api/v1/logout");
+    await axios.get(`${api.endpoint}/users/logout`);
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
-    dispatch({ type: LOGOUT_FAIL, payload: error.response.data.message });
+    dispatch({ type: LOGOUT_FAIL, payload: error?.response?.data?.message });
   }
 };
 
@@ -106,16 +108,16 @@ export const updateUserProfile = (userdata) => async (dispatch) => {
     const config = { headers: { "Content-type": "multipart/form-data" } };
 
     const { data } = await axios.put(
-      "http://localhost:8000/api/v1/me/updateMe",
+      `${api.endpoint}/users/me/updateMe`,
       userdata,
       config
     );
 
-    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
+    dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data?.success });
   } catch (error) {
     dispatch({
       type: UPDATE_PROFILE_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -127,16 +129,16 @@ export const updateUserPassword = (passwords) => async (dispatch) => {
     const config = { headers: { "Content-type": "application/json" } };
 
     const { data } = await axios.put(
-      "http://localhost:8000/api/v1/password/updatePassword",
+      `${api.endpoint}/users/password/updatePassword`,
       passwords,
       config
     );
 
-    dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.status });
+    dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data?.status });
   } catch (error) {
     dispatch({
       type: UPDATE_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -148,16 +150,16 @@ export const forgotPassword = (email) => async (dispatch) => {
     const config = { headers: { "Content-type": "application/json" } };
 
     const { data } = await axios.post(
-      "http://localhost:8000/api/v1/password/forgot",
+      `${api.endpoint}/users/password/forgot`,
       email,
       config
     );
 
-    dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
+    dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data?.message });
   } catch (error) {
     dispatch({
-      type: FORGOT_PASSWORD_SUCCESS,
-      payload: error.response.data.message,
+      type: FORGOT_PASSWORD_FAIL,
+      payload: error && error.response.data.message,
     });
   }
 };
@@ -169,16 +171,16 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
     const config = { headers: { "Content-type": "application/json" } };
 
     const { data } = await axios.put(
-      `http://localhost:8000/api/v1/password/reset/${token}`,
+      `${api.endpoint}/users/password/reset/${token}`,
       passwords,
       config
     );
 
-    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data.status });
+    dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data?.status });
   } catch (error) {
     dispatch({
       type: RESET_PASSWORD_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -189,15 +191,13 @@ export const adminGetAllUsers = () => async (dispatch) => {
     dispatch({ type: ADMIN_ALL_USERS_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    const { data } = await axios.get(
-      "http://localhost:8000/api/v1/admin/users"
-    );
+    const { data } = await axios.get(`${api.endpoint}/users/admin/users`);
 
-    dispatch({ type: ADMIN_ALL_USERS_SUCCESS, payload: data.users });
+    dispatch({ type: ADMIN_ALL_USERS_SUCCESS, payload: data?.users });
   } catch (error) {
     dispatch({
       type: ADMIN_ALL_USERS_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -208,15 +208,13 @@ export const adminGetSingleUser = (id) => async (dispatch) => {
     dispatch({ type: ADMIN_USER_DETAILS_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    const { data } = await axios.get(
-      `http://localhost:8000/api/v1/admin/user/${id}`
-    );
+    const { data } = await axios.get(`${api.endpoint}/users/admin/user/${id}`);
 
-    dispatch({ type: ADMIN_USER_DETAILS_SUCCESS, payload: data.user });
+    dispatch({ type: ADMIN_USER_DETAILS_SUCCESS, payload: data?.user });
   } catch (error) {
     dispatch({
       type: ADMIN_USER_DETAILS_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -228,16 +226,16 @@ export const adminUpdateSingleUser = (id, userData) => async (dispatch) => {
     const config = { headers: { "Content-type": "application/json" } };
 
     const { data } = await axios.put(
-      `http://localhost:8000/api/v1/admin/user/${id}`,
+      `${api.endpoint}/users/admin/user/${id}`,
       userData,
       config
     );
 
-    dispatch({ type: ADMIN_USER_DETAILS__UPDATE_SUCCESS, payload: data.user });
+    dispatch({ type: ADMIN_USER_DETAILS__UPDATE_SUCCESS, payload: data?.user });
   } catch (error) {
     dispatch({
       type: ADMIN_USER_DETAILS__UPDATE_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };
@@ -248,15 +246,13 @@ export const adminDeleteSingleUser = (id) => async (dispatch) => {
     dispatch({ type: ADMIN_USER_DELETE_REQUEST });
     // const config = { headers: { "Content-type": "application/json" } };
 
-    const { data } = await axios.delete(
-      `http://localhost:8000/api/v1/admin/user/${id}`
-    );
+    await axios.delete(`${api.endpoint}/users/admin/user/${id}`);
 
-    dispatch({ type: ADMIN_USER_DELETE_SUCCESS, payload: data });
+    dispatch({ type: ADMIN_USER_DELETE_SUCCESS });
   } catch (error) {
     dispatch({
       type: ADMIN_USER_DELETE_FAIL,
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };

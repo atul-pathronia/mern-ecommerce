@@ -42,7 +42,11 @@ const ProductDetails = () => {
     loading,
     error: productError,
   } = useSelector((state) => state.product);
-  const { error: userError, user } = useSelector((state) => state.user);
+  const {
+    error: userError,
+    user,
+    isAuthenticated,
+  } = useSelector((state) => state.user);
   const { error: reviewError, success } = useSelector(
     (state) => state.newReivew
   );
@@ -94,8 +98,10 @@ const ProductDetails = () => {
       return enqueueSnackbar(orderError, { variant: "warning" });
     }
 
-    const found = await checkProductOrderedOrNot();
-    if (!found) return;
+    if (user) {
+      const found = await checkProductOrderedOrNot();
+      if (!found) return;
+    }
 
     const myForm = new FormData();
     myForm.set("rating", rating);
@@ -130,7 +136,6 @@ const ProductDetails = () => {
       });
       dispatch(clearErrors());
     }
-
     if (userError) {
       enqueueSnackbar(userError, {
         variant: "error",
@@ -138,10 +143,10 @@ const ProductDetails = () => {
       dispatch(clearErrors());
     }
     dispatch(getProductDetails(id));
-    if (user) {
+    if (user && isAuthenticated) {
       dispatch(myOrders());
     }
-  }, [dispatch, success, id, enqueueSnackbar]);
+  }, [reviewError, success, id, productError, enqueueSnackbar]);
 
   const options = {
     size: "large",
@@ -163,9 +168,7 @@ const ProductDetails = () => {
             display: "flex",
             maxWidth: { md: "90%", sm: "95%", xs: "100%" },
             maxHeight: "100%",
-            // margin: "0 auto",
             flexDirection: { sm: "row", xs: "column" },
-            // alignItems: "center",
             gap: { md: "2rem", sm: "1rem", xs: ".5rem" },
           }}
         >
@@ -173,7 +176,6 @@ const ProductDetails = () => {
           <Box
             sx={{
               width: { md: "50%", xs: "100%" },
-              // width: "100%",
               backgroundColor: "#f7f7f7",
             }}
           >

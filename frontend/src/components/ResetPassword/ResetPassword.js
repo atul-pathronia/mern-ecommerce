@@ -11,6 +11,7 @@ import {
   Paper,
   Box,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
@@ -54,81 +55,81 @@ const ResetPassword = () => {
   return (
     <>
       <MetaData title={`Urbane Man | Reset Password`}></MetaData>
-      {loading ? (
-        <Loader></Loader>
-      ) : (
-        <Box
+      <Box
+        sx={{
+          backgroundColor: "#eee",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 0",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <Typography
           sx={{
-            backgroundColor: "#eee",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem 0",
-            flexDirection: "column",
-            gap: "1rem",
+            color: "primary.main",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            borderBottom: "5px solid #1976d2",
+            //   textDecoration: "underline",
           }}
         >
-          <Typography
-            sx={{
-              color: "primary.main",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              borderBottom: "5px solid #1976d2",
-              //   textDecoration: "underline",
-            }}
-          >
-            Reset Password
-          </Typography>
-          <Box component="form" encType="multipart/form-data">
-            <Paper sx={{ padding: "1rem" }}>
-              <Stack gap="1rem">
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="Old Password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockOpenIcon></LockOpenIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="Confirm New Password"
-                  type="password"
-                  name="confirmNewPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon></LockIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={loading ? true : false}
-                  onClick={handleUpdatePassword}
-                >
-                  Reset Password
-                </Button>
-              </Stack>
-            </Paper>
-          </Box>
+          Reset Password
+        </Typography>
+        <Box component="form" encType="multipart/form-data">
+          <Paper sx={{ padding: "1rem" }}>
+            <Stack gap="1rem">
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Old Password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOpenIcon></LockOpenIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Confirm New Password"
+                type="password"
+                name="confirmNewPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon></LockIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={loading ? true : false}
+                onClick={handleUpdatePassword}
+              >
+                {loading ? (
+                  <CircularProgress></CircularProgress>
+                ) : (
+                  "Reset Password"
+                )}
+              </Button>
+            </Stack>
+          </Paper>
         </Box>
-      )}
+      </Box>
     </>
   );
 };

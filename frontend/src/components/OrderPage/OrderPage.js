@@ -4,12 +4,16 @@ import { Box, Stack, Button, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import CheckoutSteps from "../CheckoutSteps/CheckoutSteps";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { clearErrors } from "../../actions/userAction";
 import "./orderPage.css";
 
-const OrderPage = ({ isAuthenticated }) => {
-  const { user } = useSelector((state) => state.user);
+const OrderPage = () => {
+  const { error, user } = useSelector((state) => state.user);
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const subTotal = cartItems.reduce(
     (acc, item) => acc + item.quantity * item.price,
@@ -35,14 +39,23 @@ const OrderPage = ({ isAuthenticated }) => {
     };
 
     sessionStorage.setItem("orderInfo", JSON.stringify(data));
-    navigate("/login?redirect=process/payment");
+    navigate("/process/payment");
   };
 
   useEffect(() => {
-    if (subTotal === 0) {
+    if (error) {
+      navigate("/");
+      enqueueSnackbar("You cannot access this page without login. ", {
+        variant: "error",
+      });
+      dispatch(clearErrors());
+    } else if (subTotal === 0) {
+      enqueueSnackbar("There is no product added to cart", {
+        variant: "error",
+      });
       navigate("/");
     }
-  }, []);
+  }, [error]);
 
   //   console.log(user);
 

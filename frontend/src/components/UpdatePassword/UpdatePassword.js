@@ -11,6 +11,7 @@ import {
   Paper,
   Box,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
@@ -41,11 +42,13 @@ const UpdatePassword = () => {
       dispatch(clearErrors());
     }
     if (userError) {
-      enqueueSnackbar(userError, { variant: "error" });
+      enqueueSnackbar("You cannot access this page without login. ", {
+        variant: "error",
+      });
       dispatch(clearErrors());
-    }
-    if (!isAuthenticated) {
-      navigate("/");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     }
     if (isUpdated) {
       enqueueSnackbar("Password updated successfullly", { variant: "success" });
@@ -70,98 +73,102 @@ const UpdatePassword = () => {
   return (
     <>
       <MetaData title={`Urbane Man | Update Password`}></MetaData>
-      {loading ? (
+      {/* {loading ? (
         <Loader></Loader>
-      ) : (
-        <Box
+      ) : ( */}
+      <Box
+        sx={{
+          backgroundColor: "#eee",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem 0",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <Typography
           sx={{
-            backgroundColor: "#eee",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem 0",
-            flexDirection: "column",
-            gap: "1rem",
+            color: "primary.main",
+            fontSize: "2rem",
+            fontWeight: "bold",
+            borderBottom: "5px solid #1976d2",
+            //   textDecoration: "underline",
           }}
         >
-          <Typography
-            sx={{
-              color: "primary.main",
-              fontSize: "2rem",
-              fontWeight: "bold",
-              borderBottom: "5px solid #1976d2",
-              //   textDecoration: "underline",
-            }}
-          >
-            Update Password
-          </Typography>
-          <Box component="form" encType="multipart/form-data">
-            <Paper sx={{ padding: "1rem" }}>
-              <Stack gap="1rem">
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="Old Password"
-                  name="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  type="text"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockOpenIcon></LockOpenIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="New Password"
-                  type="password"
-                  name="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon></LockIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <TextField
-                  sx={{ outline: "none" }}
-                  // size="small"
-                  variant="outlined"
-                  label="Confirm New Password"
-                  type="password"
-                  name="confirmNewPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockIcon></LockIcon>
-                      </InputAdornment>
-                    ),
-                  }}
-                ></TextField>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={loading ? true : false}
-                  onClick={handleUpdatePassword}
-                >
-                  Update Password
-                </Button>
-              </Stack>
-            </Paper>
-          </Box>
+          Update Password
+        </Typography>
+        <Box component="form" encType="multipart/form-data">
+          <Paper sx={{ padding: "1rem" }}>
+            <Stack gap="1rem">
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Old Password"
+                name="password"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                type="text"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockOpenIcon></LockOpenIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="New Password"
+                type="password"
+                name="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon></LockIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <TextField
+                sx={{ outline: "none" }}
+                // size="small"
+                variant="outlined"
+                label="Confirm New Password"
+                type="password"
+                name="confirmNewPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LockIcon></LockIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              ></TextField>
+              <Button
+                variant="contained"
+                type="submit"
+                disabled={loading ? true : false}
+                onClick={handleUpdatePassword}
+              >
+                {loading ? (
+                  <CircularProgress></CircularProgress>
+                ) : (
+                  "Update Password"
+                )}
+              </Button>
+            </Stack>
+          </Paper>
         </Box>
-      )}
+      </Box>
+      {/* )} */}
     </>
   );
 };

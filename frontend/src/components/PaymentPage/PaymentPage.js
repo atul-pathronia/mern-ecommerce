@@ -16,9 +16,10 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import EventIcon from "@mui/icons-material/Event";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import "./PaymentPage.css";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { createOrder, clearErrors } from "../../actions/orderAction";
 import { nilCartIfOrderSuccessful } from "../../actions/cartAction";
+import { api } from "../../config";
 
 const PaymentPage = () => {
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
@@ -30,19 +31,23 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { error } = useSelector((state) => state.newOrder);
-  const { user } = useSelector((state) => state.user);
+  const {
+    user,
+    erorr: userError,
+    isAuthenticated,
+  } = useSelector((state) => state.user);
 
   const paymentData = {
-    amount: Math.round(orderInfo.totalPrice * 100),
+    amount: Math.round(orderInfo?.totalPrice * 100),
   };
 
   const order = {
     shippingInfo,
     orderItems: cartItems,
-    itemPrice: orderInfo.subTotal,
-    taxPrice: orderInfo.tax,
-    shippingCharges: orderInfo.shippingPrice,
-    totalPrice: orderInfo.totalPrice,
+    itemPrice: orderInfo?.subTotal,
+    taxPrice: orderInfo?.tax,
+    shippingCharges: orderInfo?.shippingPrice,
+    totalPrice: orderInfo?.totalPrice,
   };
 
   const paymentHandler = async (e) => {
@@ -55,7 +60,7 @@ const PaymentPage = () => {
         },
       };
       const { data } = await axios.post(
-        "http://localhost:8000/api/v1/payment/process",
+        `${api.endpoint}/payment/process`,
         paymentData,
         config
       );
@@ -92,7 +97,12 @@ const PaymentPage = () => {
           };
           dispatch(createOrder(order));
           dispatch(nilCartIfOrderSuccessful());
-          navigate("/login?/process/payment?redirect=success");
+          // navigate("/login?/process/payment?redirect=success");
+          navigate("/success");
+          sessionStorage.clear();
+          enqueueSnackbar("Order Successfully Placed", {
+            variant: "success",
+          });
         } else {
           return enqueueSnackbar(
             "There is some issue while processing payment",
@@ -104,7 +114,7 @@ const PaymentPage = () => {
       }
     } catch (error) {
       payBtn.current.disabled = false;
-      enqueueSnackbar(error.response.data.message, { variant: "error" });
+      enqueueSnackbar(error?.response?.data?.message, { variant: "error" });
     }
   };
 
@@ -113,10 +123,19 @@ const PaymentPage = () => {
       enqueueSnackbar(error, { variant: "error" });
       dispatch(clearErrors());
     }
-    if (orderInfo.subTotal === 0) {
+    if (userError) {
+      navigate("/");
+      enqueueSnackbar("You cannot access this page without login. ", {
+        variant: "error",
+      });
+      dispatch(clearErrors());
+    } else if (!orderInfo) {
+      enqueueSnackbar("There is no order", {
+        variant: "error",
+      });
       navigate("/");
     }
-  }, [error]);
+  }, [error, userError]);
 
   return (
     // <Elements stripe={loadStripe(stripeApiKey)}>

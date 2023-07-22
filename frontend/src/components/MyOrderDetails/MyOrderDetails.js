@@ -1,23 +1,30 @@
 import React, { useEffect } from "react";
-import { Box, Stack, Button, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { myOrderDetails, clearErrors } from "../../actions/orderAction";
 import Loader from "../Loader/Loader";
 import MetaData from "../MetaData";
+import { useSnackbar } from "notistack";
 
-const MyOrderDetails = ({ isAuthenticated }) => {
+const MyOrderDetails = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { order, loading, error } = useSelector((state) => state.orderDetails);
+  const { order, loading } = useSelector((state) => state.orderDetails);
+  const { error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (error) {
       navigate("/");
+      enqueueSnackbar("Unauthorized access. ", {
+        variant: "error",
+      });
+      dispatch(clearErrors());
     }
     dispatch(myOrderDetails(id));
-  }, []);
+  }, [error]);
 
   //   const address = `${order?.shippingInfo.address}, ${order?.shippingInfo.city}, ${order?.shippingInfo.pinCode}, ${order?.shippingInfo.state}, ${order?.shippingInfo.country}
   //   `;
@@ -113,7 +120,7 @@ const MyOrderDetails = ({ isAuthenticated }) => {
                   alt={orderItem?.name}
                   className="productImg"
                 />
-                <Link to={`/product/${orderItem?._id}`}>
+                <Link to={`/product/${orderItem?.product}`}>
                   <Typography sx={{ color: "black", cursor: "pointer" }}>
                     {orderItem?.name}
                   </Typography>
