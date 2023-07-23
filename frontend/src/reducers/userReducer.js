@@ -110,6 +110,8 @@ export const userReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         error: null,
+        loginError: null,
+        registerError: null,
       };
 
     default:

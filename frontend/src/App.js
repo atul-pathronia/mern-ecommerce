@@ -56,10 +56,6 @@ function App() {
     // eslint-disable-next-line
   }, [dispatch]);
 
-  if (error) {
-    dispatch(clearErrors());
-  }
-
   return (
     <BrowserRouter>
       {/* <ScrollToTop></ScrollToTop> */}
