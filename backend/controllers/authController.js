@@ -57,6 +57,8 @@ exports.logoutUser = (req, res, next) => {
   res.cookie("token", "", {
     expiresIn: new Date(Date.now()),
     httpOnly: true,
+    sameSite: "None",
+    secure: true,
   });
 
   res.status(200).json({

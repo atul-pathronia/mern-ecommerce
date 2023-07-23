@@ -36,9 +36,11 @@ const Register = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { error, loading, isAuthenticated } = useSelector((state) => {
-    return state.user;
-  });
+  const { registerError, registerLoading, isAuthenticated } = useSelector(
+    (state) => {
+      return state.user;
+    }
+  );
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -54,15 +56,15 @@ const Register = () => {
   };
 
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
+    if (registerError) {
+      enqueueSnackbar(registerError, { variant: "error" });
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
       enqueueSnackbar("Log in Successful", { variant: "success" });
       navigate("/myaccount");
     }
-  }, [error, dispatch, isAuthenticated]);
+  }, [registerError, dispatch, isAuthenticated]);
 
   const handleOnChange = (e) => {
     if (e.target.name === "avatar") {
@@ -198,10 +200,14 @@ const Register = () => {
             <Button
               variant="contained"
               type="submit"
-              disabled={loading ? true : false}
+              disabled={registerLoading ? true : false}
               onClick={handleSignup}
             >
-              {loading ? <CircularProgress></CircularProgress> : "Submit"}
+              {registerLoading ? (
+                <CircularProgress></CircularProgress>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </Stack>
         </Paper>

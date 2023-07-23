@@ -23,7 +23,7 @@ const Login = ({ getStripeApiKey }) => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { error, loading, isAuthenticated } = useSelector((state) => {
+  const { loginError, loginLoading, isAuthenticated } = useSelector((state) => {
     return state.user;
   });
   const { enqueueSnackbar } = useSnackbar();
@@ -42,8 +42,8 @@ const Login = ({ getStripeApiKey }) => {
   // console.log(redirect);
 
   useEffect(() => {
-    if (error) {
-      enqueueSnackbar(error, { variant: "error" });
+    if (loginError) {
+      enqueueSnackbar(loginError, { variant: "error" });
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
@@ -51,7 +51,7 @@ const Login = ({ getStripeApiKey }) => {
       navigate(redirect);
       getStripeApiKey();
     }
-  }, [error, isAuthenticated]);
+  }, [loginError, isAuthenticated]);
 
   return (
     <Box
@@ -131,9 +131,9 @@ const Login = ({ getStripeApiKey }) => {
               variant="contained"
               type="submit"
               onClick={handleLogin}
-              disabled={loading ? true : false}
+              disabled={loginLoading ? true : false}
             >
-              {loading ? <CircularProgress /> : "Submit"}
+              {loginLoading ? <CircularProgress></CircularProgress> : "Log In"}
             </Button>
           </Stack>
         </Paper>

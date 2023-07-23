@@ -45,7 +45,16 @@ import {
 export const userReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
+      return {
+        loginLoading: true,
+        isAuthenticated: false,
+      };
+
     case REGISTER_REQUEST:
+      return {
+        registerLoading: true,
+        isAuthenticated: false,
+      };
     case LOAD_USER_REQUEST:
       return {
         loading: true,
@@ -68,14 +77,21 @@ export const userReducer = (state = { user: {} }, action) => {
         user: null,
       };
     case LOGIN_FAIL:
+      return {
+        ...state,
+        loginLoading: false,
+        isAuthenticated: false,
+        user: null,
+        loginError: action.payload,
+      };
     case REGISTER_FAIL:
       //   console.log(state);
       return {
         ...state,
-        loading: false,
+        registerLoading: false,
         isAuthenticated: false,
         user: null,
-        error: action.payload,
+        registerError: action.payload,
       };
     case LOAD_USER_FAIL:
       return {

@@ -51,11 +51,14 @@ function App() {
 
   useEffect(() => {
     dispatch(loadUser());
+    // eslint-disable-next-line
     getStripeApiKey();
     // eslint-disable-next-line
-    if (error) dispatch(clearErrors());
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
+
+  if (error) {
+    dispatch(clearErrors());
+  }
 
   return (
     <BrowserRouter>
